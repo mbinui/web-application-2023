@@ -1,0 +1,14 @@
+node {
+    stage('Hello world') {
+        sh 'echo Hello World'
+    }
+    stage('SCM Checkout') {
+        sh 'echo SCM Checkout step'
+    }
+    stage('Build-Test') {
+        sh 'echo Build-Test step'
+    }
+    stage('Archive') {
+        sh 'echo Archive step'
+    }
+}

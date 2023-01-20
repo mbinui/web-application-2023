@@ -1,0 +1,31 @@
+pipeline {
+    agent any
+	tools {
+		maven 'maven_home'
+		}
+    stages {
+        stage('SCM-Checkout') {
+            steps {
+                git branch: 'main', credentialsId: 'git-credentials', 
+				url: 'https://github.com/vikas99341/web-application-2023.git'
+            }
+        }
+        stage('Build-Test') {
+            steps {
+                sh 'mvn compile test'
+            }
+        }
+        stage('Package') {
+            steps {
+                sh 'mvn package'
+            }
+        }
+        stage('Tomcat-Deploy') {
+            steps {		
+				sshagent(['tomcat-ssh-credentials']) {
+					sh "scp -o StrictHostKeyChecking=no target/web-application-2023.war ec2-user@13.233.132.135:/opt/tomcat/webapps" 
+				}
+            }
+        }
+    }
+}
